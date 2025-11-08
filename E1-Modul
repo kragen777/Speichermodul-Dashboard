@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>Speichermodul Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  h2 { color: #333; }
+  table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  th { background-color: #f4f4f4; }
+</style>
+</head>
+<body>
+
+<h2>Preisverlauf Huawei 7kW Zusatzspeichermodul (letzte 30 Tage)</h2>
+<canvas id="preisChart" width="800" height="300"></canvas>
+
+<h2>Top 3 Anbieter</h2>
+<table>
+  <thead>
+    <tr><th>Name</th><th>Webseite</th><th>E-Mail</th></tr>
+  </thead>
+  <tbody id="anbieterListe"></tbody>
+</table>
+
+<script>
+// Beispiel-Daten von letzten 30 Tagen (Datum und Preis in Euro)
+const preisdaten = [
+  { tag: '2025-10-10', preis: 2700 }, { tag: '2025-10-11', preis: 2690 },
+  { tag: '2025-10-12', preis: 2685 }, { tag: '2025-10-13', preis: 2688 },
+  { tag: '2025-10-14', preis: 2695 }, { tag: '2025-10-15', preis: 2700 },
+  { tag: '2025-10-16', preis: 2698 }, { tag: '2025-10-17', preis: 2690 },
+  { tag: '2025-10-18', preis: 2680 }, { tag: '2025-10-19', preis: 2675 },
+  { tag: '2025-10-20', preis: 2670 }, { tag: '2025-10-21', preis: 2665 },
+  { tag: '2025-10-22', preis: 2662 }, { tag: '2025-10-23', preis: 2658 },
+  { tag: '2025-10-24', preis: 2655 }, { tag: '2025-10-25', preis: 2650 },
+  { tag: '2025-10-26', preis: 2648 }, { tag: '2025-10-27', preis: 2645 },
+  { tag: '2025-10-28', preis: 2640 }, { tag: '2025-10-29', preis: 2638 },
+  { tag: '2025-10-30', preis: 2635 }, { tag: '2025-10-31', preis: 2630 },
+  { tag: '2025-11-01', preis: 2625 }, { tag: '2025-11-02', preis: 2620 },
+  { tag: '2025-11-03', preis: 2622 }, { tag: '2025-11-04', preis: 2625 },
+  { tag: '2025-11-05', preis: 2628 }, { tag: '2025-11-06', preis: 2630 },
+  { tag: '2025-11-07', preis: 2635 }, { tag: '2025-11-08', preis: 2640 }
+];
+
+// Top 3 Anbieter mit Kontaktinfos
+const anbieter = [
+  { name: "Anbieter A", web: "https://anbieter-a.de", email: "kontakt@anbieter-a.de" },
+  { name: "Anbieter B", web: "https://anbieter-b.de", email: "info@anbieter-b.de" },
+  { name: "Anbieter C", web: "https://anbieter-c.de", email: "service@anbieter-c.de" }
+];
+
+// Chart.js Diagramm erzeugen
+const ctx = document.getElementById('preisChart').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: preisdaten.map(d => d.tag),
+    datasets: [{
+      label: 'Preis in Euro',
+      data: preisdaten.map(d => d.preis),
+      borderColor: 'rgb(54, 162, 235)',
+      fill: false,
+      tension: 0.1
+    }]
+  },
+  options: {
+    scales: {
+      x: { display: true, title: { display: true, text: 'Datum' } },
+      y: { display: true, title: { display: true, text: 'Preis (Euro)' }, beginAtZero: false }
+    }
+  }
+});
+
+// Anbieter-Tabelle füllen
+const tbody = document.getElementById('anbieterListe');
+anbieter.forEach(a => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${a.name}</td><td><a href="${a.web}" target="_blank">${a.web}</a></td><td><a href="mailto:${a.email}">${a.email}</a></td>`;
+  tbody.appendChild(tr);
+});
+</script>
+
+</body>
+</html>
